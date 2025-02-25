@@ -1,0 +1,14 @@
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\bin\Debug\net9.0\MathGame.exe
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\bin\Debug\net9.0\MathGame.deps.json
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\bin\Debug\net9.0\MathGame.runtimeconfig.json
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\bin\Debug\net9.0\MathGame.dll
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\bin\Debug\net9.0\MathGame.pdb
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.AssemblyInfoInputs.cache
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.AssemblyInfo.cs
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.csproj.CoreCompileInputs.cache
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.dll
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\refint\MathGame.dll
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.pdb
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.genruntimeconfig.cache
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\ref\MathGame.dll
