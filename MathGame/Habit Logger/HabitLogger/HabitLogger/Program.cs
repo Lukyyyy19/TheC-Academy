@@ -35,6 +35,9 @@ while (wantToContinue)
         case 0:
             wantToContinue = false;
             return;
+        default:
+            Console.WriteLine("Invalid choice. Please try again. Use 0 to 4 keys.");
+            break;
     }
 }
 
@@ -50,7 +53,12 @@ int GetUserInput()
     Console.WriteLine("0. Exit");
     Console.Write("Enter your choice: ");
     string choice = Console.ReadLine();
-    return int.Parse(choice);
+
+    if(!int.TryParse(choice, out int result))
+    {
+        return 99;
+    }
+    return result;
 }
 
 void LogDrinkingWater()
@@ -80,7 +88,7 @@ void LogDrinkingWater()
 }
 
 void DisplayDrinkingWaterLog()
-{   
+{
     Console.Clear();
     Console.WriteLine("Drinking Water Log");
     Console.WriteLine("-----------------------");
@@ -96,8 +104,10 @@ void DisplayDrinkingWaterLog()
                 Console.WriteLine($"Date: {reader["Date"]}, Quantity: {reader["Quantity"]}");
             }
         }
+
         connection.Close();
     }
+
     Console.WriteLine("Press any key to continue...");
     Console.ReadKey();
 }
@@ -119,6 +129,7 @@ void UpdateDrinkginWaterLog()
         command.ExecuteNonQuery();
         connection.Close();
     }
+
     Console.WriteLine("Log updated successfully!");
 }
 
@@ -159,6 +170,7 @@ void DeleteAllLogs()
             command.ExecuteNonQuery();
             connection.Close();
         }
+
         Console.WriteLine("All logs deleted successfully!");
     }
 }
@@ -175,5 +187,6 @@ void DeleteByDate()
         command.ExecuteNonQuery();
         connection.Close();
     }
+
     Console.WriteLine("Log deleted successfully!");
 }
