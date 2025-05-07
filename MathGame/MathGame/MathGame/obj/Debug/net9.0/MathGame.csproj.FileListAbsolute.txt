@@ -12,3 +12,4 @@ C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\Mat
 C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.pdb
 C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.genruntimeconfig.cache
 C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\ref\MathGame.dll
+C:\Users\lucas\OneDrive\Escritorio\C# Academy\TheC-Academy\MathGame\MathGame\MathGame\obj\Debug\net9.0\MathGame.sourcelink.json
