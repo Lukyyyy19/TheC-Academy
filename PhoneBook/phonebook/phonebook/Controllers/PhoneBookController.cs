@@ -30,6 +30,11 @@ public class PhoneBookController
         _context.Contacts.Add(contact);
         _context.SaveChanges();
     }
+    public void AddContact(Contact contact)
+    {
+        _context.Contacts.Add(contact);
+        _context.SaveChanges();
+    }
     
     public void DeleteContact(int id)
     {

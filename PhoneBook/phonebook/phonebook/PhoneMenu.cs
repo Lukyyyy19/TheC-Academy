@@ -6,9 +6,11 @@ namespace phonebook;
 public class PhoneMenu
 {
     private PhoneBookController _phoneBookController;
+    private UserInput _userInput;
     public PhoneMenu()
     {
         _phoneBookController = new PhoneBookController();
+        _userInput = new UserInput();
     }
     public void ShowMenu()
     {
@@ -20,9 +22,17 @@ public class PhoneMenu
                 MenuChoices.ShowContacts,
                 MenuChoices.Exit
             }));
-        if (choice == MenuChoices.ShowContacts)
+        switch (choice)
         {
-            ShowContacts();
+            case MenuChoices.ShowContacts:
+                ShowContacts();
+                break;
+            case MenuChoices.AddContact:
+                AddContact();
+                break;
+            case MenuChoices.Exit:
+                Environment.Exit(0);
+                break;
         }
     }
     
@@ -41,7 +51,20 @@ public class PhoneMenu
 
         contactTable.ShowRowSeparators();
         AnsiConsole.Write(contactTable);
+        AnsiConsole.MarkupLine("[green]Press any key to continue...[/]");
+        Console.ReadKey();
+        Console.Clear();
+        ShowMenu();
+    }
 
+    public void AddContact()
+    {
+        var contact = _userInput.CreateContact();
+        _phoneBookController.AddContact(contact);
+        AnsiConsole.MarkupLine($"Contact [green] {contact.FirstName} {contact.LastName}[/] added!... Press any key to continue");
+        Console.ReadKey();
+        Console.Clear();
+        ShowMenu();
     }
     
 }
