@@ -14,12 +14,15 @@ public class PhoneMenu
     }
     public void ShowMenu()
     {
+        Console.Clear();
         var contacts = _phoneBookController.GetAllContacts().contacts;
         var choice = AnsiConsole.Prompt(new SelectionPrompt<MenuChoices>()
             .Title("[green]PhoneBook Contacts:[/]")
-            .AddChoices(new [] { MenuChoices.AddContact ,
-                MenuChoices.DeleteContact,
+            .AddChoices(new [] { 
                 MenuChoices.ShowContacts,
+                MenuChoices.AddContact ,
+                MenuChoices.UpdateContacts,
+                MenuChoices.DeleteContact,
                 MenuChoices.Exit
             }));
         switch (choice)
@@ -32,6 +35,12 @@ public class PhoneMenu
                 break;
             case MenuChoices.Exit:
                 Environment.Exit(0);
+                break;
+            case MenuChoices.DeleteContact:
+                DeleteContact();
+                break;
+            case MenuChoices.UpdateContacts:
+                UpdateContact();
                 break;
         }
     }
@@ -51,7 +60,7 @@ public class PhoneMenu
 
         contactTable.ShowRowSeparators();
         AnsiConsole.Write(contactTable);
-        AnsiConsole.MarkupLine("[green]Press any key to continue...[/]");
+        AnsiConsole.MarkupLine("[green]Press any key to go back...[/]");
         Console.ReadKey();
         Console.Clear();
         ShowMenu();
@@ -66,6 +75,39 @@ public class PhoneMenu
         Console.Clear();
         ShowMenu();
     }
+
+    public void UpdateContact()
+    {
+        Console.Clear();
+        AnsiConsole.MarkupLine("[green]Update Contact[/]");
+        var id = _userInput.GetContactId();
+        var contact = _phoneBookController.GetContactById(id);
+        var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .AddChoices(contact.GetType().GetProperties().Where(p=>p.Name!="Id").Select(p => p.Name).ToArray())
+            );
+        var newValue = AnsiConsole.Ask<string>($"Enter new value for {choice}");
+        var property = contact.GetType().GetProperty(choice);
+        property.SetValue(contact, newValue);
+        _phoneBookController.EditContact(contact);
+        ShowMenu();
+        
+    }
+
+    public void DeleteContact()
+    {
+        var id = _userInput.GetContactId();
+        var contact = _phoneBookController.GetContactById(id);
+        var confirmation = AnsiConsole.Confirm($"Are you sure you want to delete {contact.FirstName} {contact.LastName} contact?", false);
+        if (confirmation)
+        {
+            _phoneBookController.DeleteContact(id);
+            AnsiConsole.MarkupLine("[green]Contact deleted![/]");
+            Console.ReadKey();
+        }
+        else 
+            AnsiConsole.MarkupLine("[red]Contact not deleted![/]");
+        ShowMenu();
+    }
     
 }
 
@@ -74,5 +116,6 @@ public enum MenuChoices
     AddContact,
     DeleteContact,
     ShowContacts,
+    UpdateContacts,
     Exit
 }

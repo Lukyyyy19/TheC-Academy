@@ -35,6 +35,12 @@ public class PhoneBookController
         _context.Contacts.Add(contact);
         _context.SaveChanges();
     }
+
+    public void EditContact(Contact contact)
+    {
+        _context.Contacts.Update(contact);
+        _context.SaveChanges();
+    }
     
     public void DeleteContact(int id)
     {
@@ -44,6 +50,11 @@ public class PhoneBookController
             _context.Contacts.Remove(contact);
             _context.SaveChanges();
         }
+    }
+    
+    public Contact GetContactById(int id)
+    {
+        return _context.Contacts.Find(id);
     }
 
 }

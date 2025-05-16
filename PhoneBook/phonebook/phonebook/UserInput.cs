@@ -19,4 +19,10 @@ public class UserInput
         };
         return contact;
     }
+    
+    public int GetContactId()
+    {
+        var id = AnsiConsole.Ask<int>("Enter the [green]Id[/] of the contact you want:");
+        return id;
+    }
 }
