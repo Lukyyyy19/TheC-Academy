@@ -5,7 +5,8 @@ namespace WebAppTracker.Models;
 public class CalorieModel
 {
     public int Id {get; set;}
-    [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}",ApplyFormatInEditMode = true)]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = false)]
     public DateTime Date {get; set;}
     public int Quantity {get; set;}
 }
