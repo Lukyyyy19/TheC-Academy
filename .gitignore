@@ -198,6 +198,7 @@ Icon?
 
 # dotnet stuff
 project.lock.json
+appsettings.json
 
 # VS 2015+
 *.vc.vc.opendb
@@ -224,4 +225,3 @@ AppPackages/
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
-appsettings.json
