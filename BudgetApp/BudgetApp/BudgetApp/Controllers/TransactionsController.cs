@@ -9,9 +9,11 @@ public class TransactionsController : Controller
 {
     private readonly BudgetDbContext _context;
     private readonly ICategoryService _categoryService;
-    public TransactionsController(BudgetDbContext context, ICategoryService categoryService)
+    private readonly ITransactionService _transactionService;
+    public TransactionsController(BudgetDbContext context, ICategoryService categoryService,ITransactionService transactionService)
     {
         _categoryService = categoryService;
+        _transactionService = transactionService;
         _context = context;
     }
 
@@ -35,25 +37,40 @@ public class TransactionsController : Controller
 
     public IActionResult Create()
     {
-        Console.WriteLine("asdnafkanfanf");
-        return PartialView("Create");
+        return PartialView("Create",new TransactionViewModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(TransactionViewModel newTransactionVM)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Transaction")]TransactionViewModel newTransactionVM)
     {
+        ModelState.Remove("Categories");
         var newTransaction = newTransactionVM.Transaction;
-        var transaction = new Transaction
+        if (ModelState.IsValid)
         {
-            Description = newTransaction.Description,
-            Amount = newTransaction.Amount,
-            Date = newTransaction.Date,
-            CategoryId = newTransaction.CategoryId
-        };
-        Console.WriteLine("La categoria es: "+transaction.CategoryId);
-        
-        await _context.Transactions.AddAsync(transaction);
-        await _context.SaveChangesAsync();
+            var transaction = new Transaction
+            {
+                Description = newTransaction.Description,
+                Amount = newTransaction.Amount,
+                Date = newTransaction.Date,
+                CategoryId = newTransaction.CategoryId
+            };
+            if (await _transactionService.AddTransactionAsync(transaction))
+            {
+                return Json(new { success = true, message = "Transaction created successfully!" });
+            }
+        }
+        else
+        {
+            var errores = ModelState
+                .Where(ms => ms.Value.Errors.Count > 0)
+                .Select(ms => new
+                {
+                    Campo = ms.Key,
+                    Errores = ms.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                });
+            TempData["ErrorMessage"] = "Failed to add transaction";
+        }
         return View("Index");
     }
 }

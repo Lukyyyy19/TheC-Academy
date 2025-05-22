@@ -13,6 +13,7 @@ builder.Services.AddDbContext<BudgetDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
 });
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 //builder.Services.AddScoped<TransactionsController>();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
