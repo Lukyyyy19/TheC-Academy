@@ -1,0 +1,20 @@
+using BudgetApp.Data;
+using BudgetApp.Interfaces;
+using BudgetApp.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace BudgetApp.Servicies;
+
+public class CategoryService:ICategoryService
+{
+    private readonly BudgetDbContext _context;
+    public CategoryService(BudgetDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<List<Category>> GetAllCategories()
+    {
+        return await _context.Categories.ToListAsync();
+    }
+}

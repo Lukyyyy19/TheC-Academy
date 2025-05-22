@@ -1,0 +1,24 @@
+@using BudgetApp.Models
+@model TransactionViewModel
+@{
+    ViewData["Title"] = "Transactions";
+    Layout = "_Layout";
+}
+
+<h2>Transactions</h2>
+<main>
+    <div class="container">
+        <div>
+            <button class="btn btn-primary" asp-action="Create" onclick="displayAddTransactionModal()">Add Transaction</button>
+            <div class="modal-body" id="addTransactionModal" style="display: none">
+                <div class="bg-success modal-header">
+                    <h4 class="text-white text-center">Add Transaction</h4>
+                </div>
+                @if (Model != null && Model.Categories != null)
+                {
+                    @await Html.PartialAsync("Create", Model)
+                }
+            </div>
+        </div>
+    </div>
+</main>
