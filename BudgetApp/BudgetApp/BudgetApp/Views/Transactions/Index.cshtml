@@ -14,6 +14,10 @@
             </button>
             <p class="text-danger">@TempData["ErrorMessage"]</p>
             <p class="text-success">@TempData["SuccessMessage"]</p>
+            <form class="form-control" method="get" asp-action="Index">
+                <input type="text" name="description" class="form-text"/>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
         </div>
         <div class="card">
             <div class="card-body">
@@ -36,10 +40,10 @@
                             <td>@transaction.Amount.ToString("C")</td>
                             <td>@Html.DisplayFor(modelItem=>transaction.Date)</td>
                             <td>
-                                <a class="btn btn-primary" @*data-url="@Url.Action("Edit", "Transactions", new { id = transaction.Id })"
-                                       data-bs-target="#addTransactionModal" data-bs-toggle="modal"*@>Edit</a>
+                                <a class="btn btn-primary" data-url="@Url.Action("Edit", "Transactions")"
+                                       data-bs-target="#addTransactionModal" data-bs-toggle="modal" data-id="@transaction.Id" id="btn-operation">Edit</a>
                                 <a class="btn btn-danger" data-url="@Url.Action("Delete", "Transactions")"
-                                   data-id="@transaction.Id" data-bs-target="#deleteTransactionModal" data-bs-toggle="modal" id="btn-delete">Delete</a>
+                                   data-id="@transaction.Id" data-bs-target="#deleteTransactionModal" data-bs-toggle="modal" id="btn-operation">Delete</a>
                             </td>
                         </tr>
                     }
@@ -76,7 +80,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div id="delete-modal-body-content">
+                <div id="modal-body-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editTransactionModal" tabindex="-1" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-info modal-header text-white">
+                <h4 class="modal-title">Edit Transaction</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-body-content">
                 </div>
             </div>
         </div>

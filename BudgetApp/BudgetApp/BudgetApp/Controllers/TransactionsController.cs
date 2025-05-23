@@ -20,17 +20,30 @@ public class TransactionsController : Controller
     }
 
     // GET
-    public async Task<IActionResult> Index()
+    // public async Task<IActionResult> Index()
+    // {
+    //     var transactions = await GetTransactionsList();
+    //     return View(transactions);
+    // }
+    // public async Task<IActionResult> Index(int amount)
+    // {
+    //     var transactions = await _transactionService.GetTransactions(amount);
+    //     return View(transactions);
+    // }
+    // public async Task<IActionResult> Index(Category category)
+    // {
+    //     var transactions = await _transactionService.GetTransactions(category);
+    //     return View(transactions);
+    // }
+    public async Task<IActionResult> Index(string description)
     {
-        var transactions = await GetTransactionsList();
+        var transactions = await _transactionService.GetTransactions(description);
         return View(transactions);
     }
 
     private async Task<List<Transaction>> GetTransactionsList()
     {
         var transactions = await _transactionService.GetAllTransactions();
-        transactions.ForEach(transaction =>
-            transaction.Category = _categoryService.GetCategoryById(transaction.CategoryId).Result);
         return transactions;
     }
 
@@ -77,6 +90,47 @@ public class TransactionsController : Controller
         }
 
         return View("Index", await GetTransactionsList());
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var transaction = await _transactionService.GetTransactionById(id);
+        if (transaction != null)
+        {
+            var transactionViewModel = new TransactionViewModel
+            {
+                Transaction = transaction,
+                Categories = _categoryService.GetAllCategories().Result
+            };
+            return PartialView(transactionViewModel);
+        }
+
+        TempData["ErrorMessage"] = "Transaction not found";
+        return RedirectToAction("Index", await GetTransactionsList());
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit([Bind("Transaction")] TransactionViewModel transactionViewModel)
+    {
+        ModelState.Remove("Categories");
+        var transaction = transactionViewModel.Transaction;
+        if (ModelState.IsValid)
+        {
+            if (await _transactionService.UpdateTransactionAsync(transaction))
+            {
+                TempData["SuccessMessage"] = "Transaction updated successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update transaction";
+            }
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Failed to update transaction";
+        }
+
+        return RedirectToAction("Index", await GetTransactionsList());
     }
 
     public async Task<IActionResult> Delete(int? id)
