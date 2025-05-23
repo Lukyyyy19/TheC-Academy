@@ -1,5 +1,5 @@
 @using BudgetApp.Models
-@model TransactionViewModel
+@model List<Transaction>
 @{
     ViewData["Title"] = "Transactions";
     Layout = "_Layout";
@@ -9,10 +9,48 @@
 <main>
     <div class="container">
         <div>
-            <button class="btn btn-primary" asp-action="Create" data-bs-toggle="modal"
-                    data-bs-target="#addTransactionModal">Add Transaction
+            <button class="btn btn-primary" data-url="@Url.Action("Create", "Transactions")"
+                    data-bs-target="#addTransactionModal" data-bs-toggle="modal" id="btn-create">Add Transaction
             </button>
             <p class="text-danger">@TempData["ErrorMessage"]</p>
+            <p class="text-success">@TempData["SuccessMessage"]</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Description)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Category)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Amount)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Date)</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var transaction in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem=>transaction.Description)</td>
+                            <td>@transaction.Category.Name</td>
+                            <td>@transaction.Amount.ToString("C")</td>
+                            <td>@Html.DisplayFor(modelItem=>transaction.Date)</td>
+                            <td>
+                                <a class="btn btn-primary" @*data-url="@Url.Action("Edit", "Transactions", new { id = transaction.Id })"
+                                       data-bs-target="#addTransactionModal" data-bs-toggle="modal"*@>Edit</a>
+                                <a class="btn btn-danger" data-url="@Url.Action("Delete", "Transactions")"
+                                   data-id="@transaction.Id" data-bs-target="#deleteTransactionModal" data-bs-toggle="modal" id="btn-delete">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td><strong>Total: @Model.Sum(t => t.Amount).ToString("C")</strong></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </main>
@@ -23,11 +61,23 @@
                 <h4 class="modal-title">Add Transaction</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="modal-body-content">
-                @if (Model != null && Model.Categories != null)
-                {
-                    @await Html.PartialAsync("Create", Model)
-                }
+            <div class="modal-body">
+                <div id="modal-body-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="deleteTransactionModal" tabindex="-1" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-danger modal-header text-white">
+                <h4 class="modal-title">Delete Transaction</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="delete-modal-body-content">
+                </div>
             </div>
         </div>
     </div>

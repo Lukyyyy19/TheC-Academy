@@ -10,7 +10,9 @@ public class TransactionsController : Controller
     private readonly BudgetDbContext _context;
     private readonly ICategoryService _categoryService;
     private readonly ITransactionService _transactionService;
-    public TransactionsController(BudgetDbContext context, ICategoryService categoryService,ITransactionService transactionService)
+
+    public TransactionsController(BudgetDbContext context, ICategoryService categoryService,
+        ITransactionService transactionService)
     {
         _categoryService = categoryService;
         _transactionService = transactionService;
@@ -18,9 +20,23 @@ public class TransactionsController : Controller
     }
 
     // GET
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        //ESTO ES COMO UN MODELO DE LO QUE VA  AVER EL USUARIO POR DEFECTO
+        var transactions = await GetTransactionsList();
+        return View(transactions);
+    }
+
+    private async Task<List<Transaction>> GetTransactionsList()
+    {
+        var transactions = await _transactionService.GetAllTransactions();
+        transactions.ForEach(transaction =>
+            transaction.Category = _categoryService.GetCategoryById(transaction.CategoryId).Result);
+        return transactions;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
         var transactionViewModel = new TransactionViewModel
         {
             Transaction = new Transaction
@@ -30,19 +46,14 @@ public class TransactionsController : Controller
                 Date = DateTime.Now,
                 CategoryId = 0
             },
-            Categories = _categoryService.GetAllCategories().Result
+            Categories = await _categoryService.GetAllCategories()
         };
-        return View(transactionViewModel);
-    }
-
-    public IActionResult Create()
-    {
-        return PartialView("Create",new TransactionViewModel());
+        return PartialView(transactionViewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Transaction")]TransactionViewModel newTransactionVM)
+    public async Task<IActionResult> Create([Bind("Transaction")] TransactionViewModel newTransactionVM)
     {
         ModelState.Remove("Categories");
         var newTransaction = newTransactionVM.Transaction;
@@ -57,20 +68,46 @@ public class TransactionsController : Controller
             };
             if (await _transactionService.AddTransactionAsync(transaction))
             {
-                return Json(new { success = true, message = "Transaction created successfully!" });
+                TempData["SuccessMessage"] = "Transaction created successfully!";
             }
         }
         else
         {
-            var errores = ModelState
-                .Where(ms => ms.Value.Errors.Count > 0)
-                .Select(ms => new
-                {
-                    Campo = ms.Key,
-                    Errores = ms.Value.Errors.Select(e => e.ErrorMessage).ToList()
-                });
             TempData["ErrorMessage"] = "Failed to add transaction";
         }
-        return View("Index");
+
+        return View("Index", await GetTransactionsList());
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        int transactionId = id ?? 0;
+        var transaction = await _transactionService.GetTransactionById(transactionId);
+        if (transaction != null)
+        {
+            ModelState.Remove("Categories");
+            var transactionViewModel = new TransactionViewModel
+            {
+                Transaction = transaction,
+            };
+            return PartialView(transactionViewModel);
+        }
+
+        TempData["ErrorMessage"] = "Transaction not found";
+        return RedirectToAction("Index", await GetTransactionsList());
+    }
+    [HttpPost,ActionName("Delete")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        if (await _transactionService.DeleteTransactionAsync(id))
+        {
+            TempData["SuccessMessage"] = "Transaction deleted successfully!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Failed to delete transaction";
+        }
+
+        return RedirectToAction("Index", await GetTransactionsList());
     }
 }
