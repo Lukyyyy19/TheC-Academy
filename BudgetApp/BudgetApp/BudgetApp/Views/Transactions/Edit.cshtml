@@ -2,18 +2,6 @@
 <form asp-action="Edit" method="post" >
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <input type="hidden" asp-for="Transaction.Id" />
-        <label class="form-label" asp-for="Transaction.CategoryId">Category</label>
-        <select asp-for="Transaction.CategoryId" class="form-select">
-            <option value="">Select a Category</option>
-            @foreach (var category in Model.Categories)
-            {
-                <option value="@category.Id">@category.Name</option>
-            }
-        </select>
-        <span asp-validation-for="Transaction.CategoryId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
         <label class="form-label" asp-for="Transaction.Description"></label>
         <input asp-for="Transaction.Description" class="form-control"/>
     </div>

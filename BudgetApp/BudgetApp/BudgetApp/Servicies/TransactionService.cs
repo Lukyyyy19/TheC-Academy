@@ -5,15 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetApp.Servicies;
 
-public class TransactionService: ITransactionService
+public class TransactionService : ITransactionService
 {
     private readonly BudgetDbContext _context;
     private readonly ICategoryService _categoryService;
+
     public TransactionService(BudgetDbContext context, ICategoryService categoryService)
     {
         _categoryService = categoryService;
         _context = context;
     }
+
     public async Task<bool> AddTransactionAsync(Transaction transaction)
     {
         await _context.Transactions.AddAsync(transaction);
@@ -29,11 +31,21 @@ public class TransactionService: ITransactionService
         return transactions;
     }
 
-    public async Task<List<Transaction>> GetTransactions(string description)
+    public async Task<List<Transaction>> GetTransactions(string description, Category? category = null)
     {
-        if(description == null){description = "";}
+        if (description == null)
+        {
+            description = "";
+        }
+
         var allTransactions = await GetAllTransactions();
-        return allTransactions.Where(t => t.Description.Contains(description)).ToList();
+        if (category != null && category.Id != 0)
+        {
+            allTransactions = allTransactions.Where(t => t.Category == category).ToList();
+        }
+        return allTransactions.Where(t =>
+            t.Description.Contains(description)
+        ).ToList();
     }
 
     public async Task<List<Transaction>> GetTransactions(Category category)
@@ -62,6 +74,7 @@ public class TransactionService: ITransactionService
             await _context.SaveChangesAsync();
             return true;
         }
+
         return false;
     }
 

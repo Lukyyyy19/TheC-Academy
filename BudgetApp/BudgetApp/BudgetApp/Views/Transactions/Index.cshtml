@@ -15,8 +15,21 @@
             <p class="text-danger">@TempData["ErrorMessage"]</p>
             <p class="text-success">@TempData["SuccessMessage"]</p>
             <form class="form-control" method="get" asp-action="Index">
-                <input type="text" name="description" class="form-text"/>
-                <button type="submit" class="btn btn-primary">Search</button>
+                <div class="form-group">
+                    <input type="text" name="description" class="form-control-sm"/>
+                </div>
+                <div class="form-group">
+                    <select name="categoryId" class="form-select">
+                        <option value="">Select a Category</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
             </form>
         </div>
         <div class="card">
@@ -35,22 +48,24 @@
                     @foreach (var transaction in Model)
                     {
                         <tr>
-                            <td>@Html.DisplayFor(modelItem=>transaction.Description)</td>
+                            <td>@Html.DisplayFor(modelItem => transaction.Description)</td>
                             <td>@transaction.Category.Name</td>
-                            <td>@transaction.Amount.ToString("C")</td>
-                            <td>@Html.DisplayFor(modelItem=>transaction.Date)</td>
+                            <td>@transaction.Amount.ToString("C0")</td>
+                            <td>@Html.DisplayFor(modelItem => transaction.Date)</td>
                             <td>
                                 <a class="btn btn-primary" data-url="@Url.Action("Edit", "Transactions")"
-                                       data-bs-target="#addTransactionModal" data-bs-toggle="modal" data-id="@transaction.Id" id="btn-operation">Edit</a>
+                                   data-bs-target="#addTransactionModal" data-bs-toggle="modal"
+                                   data-id="@transaction.Id" id="btn-operation">Edit</a>
                                 <a class="btn btn-danger" data-url="@Url.Action("Delete", "Transactions")"
-                                   data-id="@transaction.Id" data-bs-target="#deleteTransactionModal" data-bs-toggle="modal" id="btn-operation">Delete</a>
+                                   data-id="@transaction.Id" data-bs-target="#deleteTransactionModal"
+                                   data-bs-toggle="modal" id="btn-operation">Delete</a>
                             </td>
                         </tr>
                     }
                     </tbody>
                     <tfoot>
-                    <tr>
-                        <td><strong>Total: @Model.Sum(t => t.Amount).ToString("C")</strong></td>
+                    <tr class="d-table-row">
+                        <td><strong>Total: @Model.Sum(t => t.Amount).ToString("C0")</strong></td>
                     </tr>
                     </tfoot>
                 </table>

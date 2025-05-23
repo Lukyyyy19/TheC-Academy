@@ -7,7 +7,6 @@ namespace BudgetApp.Controllers;
 
 public class TransactionsController : Controller
 {
-    private readonly BudgetDbContext _context;
     private readonly ICategoryService _categoryService;
     private readonly ITransactionService _transactionService;
 
@@ -16,33 +15,20 @@ public class TransactionsController : Controller
     {
         _categoryService = categoryService;
         _transactionService = transactionService;
-        _context = context;
     }
 
     // GET
-    // public async Task<IActionResult> Index()
-    // {
-    //     var transactions = await GetTransactionsList();
-    //     return View(transactions);
-    // }
-    // public async Task<IActionResult> Index(int amount)
-    // {
-    //     var transactions = await _transactionService.GetTransactions(amount);
-    //     return View(transactions);
-    // }
-    // public async Task<IActionResult> Index(Category category)
-    // {
-    //     var transactions = await _transactionService.GetTransactions(category);
-    //     return View(transactions);
-    // }
-    public async Task<IActionResult> Index(string description)
+    public async Task<IActionResult> Index(string description, int categoryId)
     {
-        var transactions = await _transactionService.GetTransactions(description);
+        ViewBag.Categories = await _categoryService.GetAllCategories();
+        var category = await _categoryService.GetCategoryById(categoryId);
+        var transactions = await _transactionService.GetTransactions(description, category);
         return View(transactions);
     }
 
     private async Task<List<Transaction>> GetTransactionsList()
     {
+        ViewBag.Categories = await _categoryService.GetAllCategories();
         var transactions = await _transactionService.GetAllTransactions();
         return transactions;
     }
@@ -108,6 +94,7 @@ public class TransactionsController : Controller
         TempData["ErrorMessage"] = "Transaction not found";
         return RedirectToAction("Index", await GetTransactionsList());
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit([Bind("Transaction")] TransactionViewModel transactionViewModel)
@@ -150,7 +137,8 @@ public class TransactionsController : Controller
         TempData["ErrorMessage"] = "Transaction not found";
         return RedirectToAction("Index", await GetTransactionsList());
     }
-    [HttpPost,ActionName("Delete")]
+
+    [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> Delete(int id)
     {
         if (await _transactionService.DeleteTransactionAsync(id))

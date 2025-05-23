@@ -1,0 +1,88 @@
+@model List<BudgetApp.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "_Layout";
+}
+
+<h2>Categories</h2>
+<main>
+    <div class="container">
+        <div>
+            <button class="btn btn-primary" data-url="@Url.Action("Create", "Category")"
+                    data-bs-target="#addCategoryModal" data-bs-toggle="modal" id="btn-create">Add Category
+            </button>
+            <p class="text-danger">@TempData["ErrorMessage"]</p>
+            <p class="text-success">@TempData["SuccessMessage"]</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Name)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model[0].Transactions)</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem=>category.Name)</td>
+                            <td>@Html.DisplayFor(modelItem=>category.Transactions.Count)</td>
+                            <td>
+                                <a class="btn btn-primary" data-url="@Url.Action("Edit", "Category")"
+                                       data-bs-target="#addCategoryModal" data-bs-toggle="modal" data-id="@category.Id" id="btn-operation">Edit</a>
+                                <a class="btn btn-danger" data-url="@Url.Action("Delete", "Category")"
+                                   data-id="@category.Id" data-bs-target="#deleteCategoryModal" data-bs-toggle="modal" id="btn-operation">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<div id="addCategoryModal" tabindex="-1" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-success modal-header text-white">
+                <h4 class="modal-title">Add Category</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-body-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="deleteCategoryModal" tabindex="-1" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-danger modal-header text-white">
+                <h4 class="modal-title">Delete Category</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-body-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editCategoryModal" tabindex="-1" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-info modal-header text-white">
+                <h4 class="modal-title">Edit Category</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-body-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
